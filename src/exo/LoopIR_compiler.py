@@ -85,7 +85,7 @@ def find_all_subprocs(proc_list):
             walk(sp, visited | {proc})
 
     for proc in proc_list:
-        walk(proc, set())
+        walk(proc._loopir_proc, set())
 
     # Reverse for C declaration order.
     return list(reversed(all_procs))

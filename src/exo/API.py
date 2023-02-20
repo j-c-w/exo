@@ -154,7 +154,7 @@ def compile_procs(proc_list, basedir: Path, c_file: str, h_file: str):
 def compile_procs_to_strings(proc_list, h_file_name: str):
     assert isinstance(proc_list, list)
     assert all(isinstance(p, Procedure) for p in proc_list)
-    return run_compile([p._loopir_proc for p in proc_list], h_file_name)
+    return run_compile([p for p in proc_list], h_file_name)
 
 
 class Procedure(ProcedureBase):
@@ -184,6 +184,9 @@ class Procedure(ProcedureBase):
             decl_new_proc(proc)
 
         self._loopir_proc = proc
+
+    def __hash__(self):
+        return hash(self._loopir_proc)
 
     def __str__(self):
         return str(self._loopir_proc)
@@ -331,7 +334,7 @@ class Procedure(ProcedureBase):
         return decls + "\n" + defns
 
     def compile_c(self, directory: Path, filename: str):
-        compile_procs([self._loopir_proc], directory, f"{filename}.c", f"{filename}.h")
+        compile_procs([self], directory, f"{filename}.c", f"{filename}.h")
 
     def interpret(self, **kwargs):
         run_interpreter(self._loopir_proc, kwargs)
